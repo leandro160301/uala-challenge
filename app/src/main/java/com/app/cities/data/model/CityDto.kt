@@ -11,7 +11,7 @@ data class CityDto(
     val id: Int,
     val coord: CoordDto
 )
-
+@Serializable
 data class CoordDto(
     val lon: Double,
     val lat: Double
