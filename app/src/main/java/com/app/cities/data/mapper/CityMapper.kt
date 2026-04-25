@@ -6,6 +6,7 @@ import com.app.cities.domain.search.normalize
 
 fun CityDto.toDomain(): City {
     return City(
+        id = id,
         name = name,
         country = country,
         lat = coord.lat,

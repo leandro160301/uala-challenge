@@ -12,7 +12,7 @@ fun CityList(cities: List<City>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(
             items = cities,
-            key = { it.name + it.country } // Buena práctica usar llaves únicas
+            key = { it.id }
         ) { city ->
             CityItem(city = city)
         }

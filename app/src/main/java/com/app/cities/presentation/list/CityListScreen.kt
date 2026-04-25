@@ -62,8 +62,8 @@ fun CityListContent(
 fun CityListPreview() {
     val fakeState = CityListUiState(
         cities = listOf(
-            City("Buenos Aires", "AR", -50.2, -68.4, "buenos aires"),
-            City("Berlin", "DE", 92.63, 10.1, "berlin")
+            City(id = 1,"Buenos Aires", "AR", -50.2, -68.4, "buenos aires"),
+            City(id = 2,"Berlin", "DE", 92.63, 10.1, "berlin")
         ),
         isLoading = false,
         query = ""
