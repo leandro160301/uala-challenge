@@ -1,0 +1,20 @@
+package com.app.cities.presentation.list.components
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import com.app.cities.domain.model.City
+
+@Composable
+fun CityList(cities: List<City>) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(
+            items = cities,
+            key = { it.name + it.country } // Buena práctica usar llaves únicas
+        ) { city ->
+            CityItem(city = city)
+        }
+    }
+}
