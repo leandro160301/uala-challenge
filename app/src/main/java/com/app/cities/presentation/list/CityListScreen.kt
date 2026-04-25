@@ -19,11 +19,13 @@ import com.app.cities.presentation.list.components.CityList
 
 @Composable
 fun CityListScreen(
-    viewModel: CityListViewModel
+    viewModel: CityListViewModel,
+    modifier: Modifier = Modifier
 ) {
     val state by viewModel.uiState.collectAsState()
 
     CityListContent(
+        modifier = modifier,
         state = state,
         onSearch = { query -> viewModel.onSearch(query) }
     )
@@ -32,9 +34,10 @@ fun CityListScreen(
 @Composable
 fun CityListContent(
     state: CityListUiState,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
 
         TextField(
             value = state.query,
@@ -68,7 +71,7 @@ fun CityListPreview() {
 
     CityListContent(
         state = fakeState,
-        onSearch = {}
+        onSearch = {},
     )
 }
 
@@ -77,6 +80,6 @@ fun CityListPreview() {
 fun CityListLoadingPreview() {
     CityListContent(
         state = CityListUiState(isLoading = true),
-        onSearch = {}
+        onSearch = {},
     )
 }
