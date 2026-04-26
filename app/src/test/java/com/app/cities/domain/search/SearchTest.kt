@@ -73,6 +73,44 @@ class SearchTest {
     }
 
     @Test
+    fun `given empty city list returns empty result`() {
+        val result = searchByPrefix(emptyList(), "Al")
+
+        assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `query with leading or trailing spaces is handled correctly`() {
+        val cities = defaultCities()
+
+        val result = searchByPrefix(cities, "  Al  ")
+
+        assertEquals(2, result.size)
+    }
+
+    @Test
+    fun `query longer than city name returns empty`() {
+        val cities = defaultCities()
+
+        val result = searchByPrefix(cities, "AlabamaX")
+
+        assertEquals(0, result.size)
+    }
+
+    @Test
+    fun `results preserve alphabetical order`() {
+        val cities = listOf(
+            City(1, "Albuquerque", "US", 0.0, 0.0, "albuquerque", false),
+            City(2, "Alabama", "US", 0.0, 0.0, "alabama", false)
+        ).sortedBy { it.normalizedName }
+
+        val result = searchByPrefix(cities, "Al")
+
+        assertEquals("Alabama", result[0].name)
+        assertEquals("Albuquerque", result[1].name)
+    }
+
+    @Test
     fun `normalize converts text to lowercase`() {
         val result = normalize("Berlin")
         assertEquals("berlin", result)
@@ -94,6 +132,20 @@ class SearchTest {
     fun `normalize handles empty string`() {
         val result = normalize("")
         assertEquals("", result)
+    }
+
+    @Test
+    fun `normalize removes multiple accents correctly`() {
+        val result = normalize("ÁÉÍÓÚ")
+
+        assertEquals("aeiou", result)
+    }
+
+    @Test
+    fun `normalize handles special characters correctly`() {
+        val result = normalize("München")
+
+        assertEquals("munchen", result)
     }
 
 }

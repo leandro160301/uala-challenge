@@ -6,9 +6,10 @@ fun searchByPrefix(
     cities: List<City>,
     query: String
 ): List<City> {
-    if (query.isEmpty()) return cities
 
-    val normalizedQuery = normalize(query)
+    val normalizedQuery = normalize(query.trim())
+
+    if (normalizedQuery.isEmpty()) return cities
 
     val startIndex = lowerBound(cities, normalizedQuery)
     val result = mutableListOf<City>()
@@ -21,6 +22,7 @@ fun searchByPrefix(
 
     return result
 }
+
 
 fun lowerBound(cities: List<City>, query: String): Int {
     var left = 0
