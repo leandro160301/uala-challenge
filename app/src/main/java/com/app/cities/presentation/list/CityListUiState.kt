@@ -7,5 +7,6 @@ data class CityListUiState(
     val isLoading: Boolean = false,
     val query: String = "",
     val error: String? = null,
-    val showOnlyFavorites: Boolean = false
+    val showOnlyFavorites: Boolean = false,
+    val selectedCityId: Int? = null
 )

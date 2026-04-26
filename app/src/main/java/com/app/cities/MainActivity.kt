@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
                                             tint = Color.Gray,
                                             modifier = Modifier.size(64.dp)
                                         )
-                                        Text("Selecciona una ciudad para ver los detalles", color = Color.Gray)
+                                        Text("Selecciona una ciudad para ver los detalles o el mapa", color = Color.Gray)
                                     }
                                 }
                             }

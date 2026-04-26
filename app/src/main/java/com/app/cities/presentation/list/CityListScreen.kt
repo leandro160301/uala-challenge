@@ -81,6 +81,7 @@ fun CityListContent(
             state.error != null -> ErrorView(message = state.error)
             else -> CityList(
                 cities = state.cities,
+                selectedCityId = state.selectedCityId,
                 onFavoriteClick = onFavoriteClick,
                 onCityClick = onCityClick,
                 onDetailClick = onDetailClick

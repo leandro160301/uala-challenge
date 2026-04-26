@@ -86,15 +86,18 @@ class CityListViewModel(
     }
 
     fun onCitySelected(city: City) {
+        _uiState.value = _uiState.value.copy(selectedCityId = city.id)
         _screenState.value = ScreenState.Map(city)
     }
 
     fun onCityDetailSelected(city: City) {
+        _uiState.value = _uiState.value.copy(selectedCityId = city.id)
         _screenState.value = ScreenState.Detail(city)
     }
 
     fun onBack() {
         _screenState.value = ScreenState.List
+        _uiState.value = _uiState.value.copy(selectedCityId = null)
     }
 
 }
