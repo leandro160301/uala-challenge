@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.cities.domain.model.City
 import com.app.cities.domain.usecase.GetCitiesUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
+import com.app.cities.domain.usecase.ToggleFavoriteUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 
 class CityListViewModel(
     private val getCitiesUseCase: GetCitiesUseCase,
-    private val searchCitiesUseCase: SearchCitiesUseCase
+    private val searchCitiesUseCase: SearchCitiesUseCase,
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
 ) : ViewModel() {
 
     private var allCities: List<City> = emptyList()
@@ -59,6 +61,12 @@ class CityListViewModel(
             _uiState.value = _uiState.value.copy(
                 cities = result
             )
+        }
+    }
+
+    fun onToggleFavorite(cityId: Int) {
+        viewModelScope.launch {
+            toggleFavoriteUseCase(cityId)
         }
     }
 }

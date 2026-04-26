@@ -27,7 +27,8 @@ fun CityListScreen(
     CityListContent(
         modifier = modifier,
         state = state,
-        onSearch = { query -> viewModel.onSearch(query) }
+        onSearch = { query -> viewModel.onSearch(query) },
+        onFavoriteClick = { cityId-> viewModel.onToggleFavorite(cityId) }
     )
 }
 
@@ -35,7 +36,8 @@ fun CityListScreen(
 fun CityListContent(
     state: CityListUiState,
     onSearch: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFavoriteClick: (Int) -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
 
@@ -52,7 +54,10 @@ fun CityListContent(
         when {
             state.isLoading -> LoadingView()
             state.error != null -> ErrorView(message = state.error)
-            else -> CityList(cities = state.cities)
+            else -> CityList(
+                cities = state.cities,
+                onFavoriteClick = onFavoriteClick
+            )
         }
     }
 }
@@ -62,8 +67,8 @@ fun CityListContent(
 fun CityListPreview() {
     val fakeState = CityListUiState(
         cities = listOf(
-            City(id = 1,"Buenos Aires", "AR", -50.2, -68.4, "buenos aires"),
-            City(id = 2,"Berlin", "DE", 92.63, 10.1, "berlin")
+            City(id = 1,"Buenos Aires", "AR", -50.2, -68.4, "buenos aires", false),
+            City(id = 2,"Berlin", "DE", 92.63, 10.1, "berlin", true)
         ),
         isLoading = false,
         query = ""
@@ -72,6 +77,7 @@ fun CityListPreview() {
     CityListContent(
         state = fakeState,
         onSearch = {},
+        onFavoriteClick = {}
     )
 }
 
@@ -81,5 +87,6 @@ fun CityListLoadingPreview() {
     CityListContent(
         state = CityListUiState(isLoading = true),
         onSearch = {},
+        onFavoriteClick = {}
     )
 }

@@ -8,13 +8,19 @@ import androidx.compose.ui.Modifier
 import com.app.cities.domain.model.City
 
 @Composable
-fun CityList(cities: List<City>) {
+fun CityList(
+    cities: List<City>,
+    onFavoriteClick: (Int) -> Unit
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(
             items = cities,
             key = { it.id }
         ) { city ->
-            CityItem(city = city)
+            CityItem(
+                city = city,
+                onFavoriteClick = { onFavoriteClick(city.id) }
+            )
         }
     }
 }
