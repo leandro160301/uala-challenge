@@ -19,8 +19,8 @@ class CityListViewModel(
 
     private var allCities: List<City> = emptyList()
 
-    private val _selectedCity = MutableStateFlow<City?>(null)
-    val selectedCity: StateFlow<City?> = _selectedCity
+    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.List)
+    val screenState: StateFlow<ScreenState> = _screenState
 
     private val _uiState = MutableStateFlow(CityListUiState(isLoading = true))
     val uiState: StateFlow<CityListUiState> = _uiState
@@ -86,11 +86,15 @@ class CityListViewModel(
     }
 
     fun onCitySelected(city: City) {
-        _selectedCity.value = city
+        _screenState.value = ScreenState.Map(city)
     }
 
-    fun clearSelection() {
-        _selectedCity.value = null
+    fun onCityDetailSelected(city: City) {
+        _screenState.value = ScreenState.Detail(city)
+    }
+
+    fun onBack() {
+        _screenState.value = ScreenState.List
     }
 
 }

@@ -17,13 +17,15 @@ import com.app.cities.data.repository.CityRepositoryImpl
 import com.app.cities.domain.usecase.GetCitiesUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
+import com.app.cities.presentation.detail.CityDetailScreen
 import com.app.cities.presentation.list.CityListScreen
+import com.app.cities.presentation.list.CityListViewModel
 import com.app.cities.presentation.list.CityListViewModelFactory
+import com.app.cities.presentation.list.ScreenState
 import com.app.cities.presentation.map.MapScreen
 import com.app.cities.ui.theme.CitiesAppTheme
 
 class MainActivity : ComponentActivity() {
-
 
     private val remoteDataSource by lazy { CityRemoteDataSource() }
     private val favoritesLocalDataSource by lazy { FavoritesLocalDataSource(applicationContext) }
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    private val viewModel by viewModels<com.app.cities.presentation.list.CityListViewModel> {
+    private val viewModel by viewModels<CityListViewModel> {
         CityListViewModelFactory(
             getCitiesUseCase = GetCitiesUseCase(repository),
             searchCitiesUseCase = SearchCitiesUseCase(),
@@ -50,19 +52,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             CitiesAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
-                    val selectedCity by viewModel.selectedCity.collectAsState()
 
-                    if (selectedCity == null) {
-                        CityListScreen(
-                            viewModel = viewModel,
-                            modifier = Modifier.padding(padding)
-                        )
-                    } else {
-                        MapScreen(
-                            modifier = Modifier.padding(padding),
-                            city = selectedCity!!,
-                            onBack = { viewModel.clearSelection() }
-                        )
+                    val screenState by viewModel.screenState.collectAsState()
+
+                    when (screenState) {
+                        is ScreenState.List -> {
+                            CityListScreen(
+                                viewModel,
+                                modifier = Modifier.padding(padding)
+                            )
+                        }
+                        is ScreenState.Map -> {
+                            MapScreen(
+                                modifier = Modifier.padding(padding),
+                                city = (screenState as ScreenState.Map).city,
+                                onBack = { viewModel.onBack() }
+                            )
+                        }
+                        is ScreenState.Detail -> {
+
+                        }
                     }
                 }
             }

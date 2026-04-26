@@ -32,7 +32,8 @@ fun CityListScreen(
         onSearch = { query -> viewModel.onSearch(query) },
         onFavoriteClick = { cityId -> viewModel.onToggleFavorite(cityId) },
         onToggleFavoritesFilter = { viewModel.onToggleFavoritesFilter() },
-        onCityClick = { city -> viewModel.onCitySelected(city) }
+        onCityClick = { city -> viewModel.onCitySelected(city) },
+        onDetailClick = { city -> viewModel.onCityDetailSelected(city) }
     )
 }
 
@@ -43,7 +44,8 @@ fun CityListContent(
     modifier: Modifier = Modifier,
     onFavoriteClick: (Int) -> Unit,
     onToggleFavoritesFilter: () -> Unit,
-    onCityClick: (City) -> Unit
+    onCityClick: (City) -> Unit,
+    onDetailClick: (City) -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
 
@@ -74,7 +76,8 @@ fun CityListContent(
             else -> CityList(
                 cities = state.cities,
                 onFavoriteClick = onFavoriteClick,
-                onCityClick = onCityClick
+                onCityClick = onCityClick,
+                onDetailClick = onDetailClick
             )
         }
     }
@@ -97,7 +100,8 @@ fun CityListPreview() {
         onSearch = {},
         onFavoriteClick = {},
         onToggleFavoritesFilter = {},
-        onCityClick = {}
+        onCityClick = {},
+        onDetailClick = {}
     )
 }
 
@@ -109,6 +113,7 @@ fun CityListLoadingPreview() {
         onSearch = {},
         onFavoriteClick = {},
         onToggleFavoritesFilter = {},
-        onCityClick = {}
+        onCityClick = {},
+        onDetailClick = {}
     )
 }

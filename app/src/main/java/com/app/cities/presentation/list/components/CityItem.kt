@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
@@ -17,7 +18,8 @@ import com.app.cities.domain.model.City
 fun CityItem(
     city: City,
     onCityClick: (City) -> Unit,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    onDetailClick: (City) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -39,5 +41,9 @@ fun CityItem(
                 .padding(start = 8.dp)
                 .clickable { onFavoriteClick() }
         )
+
+        Button(onClick = { onDetailClick(city) }) {
+            Text("Info")
+        }
     }
 }

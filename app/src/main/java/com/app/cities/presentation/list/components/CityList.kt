@@ -12,6 +12,7 @@ fun CityList(
     cities: List<City>,
     onFavoriteClick: (Int) -> Unit,
     onCityClick: (City) -> Unit,
+    onDetailClick: (City) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(
@@ -21,7 +22,8 @@ fun CityList(
             CityItem(
                 city = city,
                 onFavoriteClick = { onFavoriteClick(city.id) },
-                onCityClick = onCityClick
+                onCityClick = onCityClick,
+                onDetailClick = onDetailClick
             )
         }
     }
