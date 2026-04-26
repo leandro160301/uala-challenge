@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CityRepository {
     fun getCities(): Flow<List<City>>
+    suspend fun toggleFavorite(cityId: Int)
 }

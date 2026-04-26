@@ -27,4 +27,8 @@ class CityRepositoryImpl(
             }
         }
     }
+    
+    override suspend fun toggleFavorite(cityId: Int) {
+        favoritesLocalDataSource.toggleFavorite(cityId)
+    }
 }
