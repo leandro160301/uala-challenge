@@ -70,7 +70,11 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         is ScreenState.Detail -> {
-
+                            CityDetailScreen(
+                                modifier = Modifier.padding(padding),
+                                city = (screenState as ScreenState.Detail).city,
+                                onBack = { viewModel.onBack() }
+                            )
                         }
                     }
                 }
