@@ -62,4 +62,5 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.maps.compose)
     implementation(libs.play.services.maps)
+    implementation(libs.androidx.compose.material.icons.extended)
 }
