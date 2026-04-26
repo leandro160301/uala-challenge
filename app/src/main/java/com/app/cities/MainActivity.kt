@@ -1,16 +1,19 @@
 package com.app.cities
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import com.app.cities.data.local.FavoritesLocalDataSource
 import com.app.cities.data.remote.CityRemoteDataSource
 import com.app.cities.data.repository.CityRepositoryImpl
@@ -53,30 +56,52 @@ class MainActivity : ComponentActivity() {
             CitiesAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { padding ->
 
-                    val screenState by viewModel.screenState.collectAsState()
+                    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-                    when (screenState) {
-                        is ScreenState.List -> {
+                    val screenState by viewModel.screenState.collectAsState()
+                    val selectedCity by viewModel.selectedCity.collectAsState()
+
+                    if (isLandscape) {
+                        Row(modifier = Modifier.padding(padding)) {
+
                             CityListScreen(
-                                viewModel,
-                                modifier = Modifier.padding(padding)
+                                viewModel = viewModel,
+                                modifier = Modifier.weight(1f)
                             )
+
+                            selectedCity?.let { city ->
+                                MapScreen(
+                                    modifier = Modifier.weight(1f),
+                                    city = city,
+                                    onBack = {}
+                                )
+                            }
                         }
-                        is ScreenState.Map -> {
-                            MapScreen(
-                                modifier = Modifier.padding(padding),
-                                city = (screenState as ScreenState.Map).city,
-                                onBack = { viewModel.onBack() }
-                            )
-                        }
-                        is ScreenState.Detail -> {
-                            CityDetailScreen(
-                                modifier = Modifier.padding(padding),
-                                city = (screenState as ScreenState.Detail).city,
-                                onBack = { viewModel.onBack() }
-                            )
+                    } else {
+                        when (screenState) {
+                            is ScreenState.List -> {
+                                CityListScreen(
+                                    viewModel,
+                                    modifier = Modifier.padding(padding)
+                                )
+                            }
+                            is ScreenState.Map -> {
+                                MapScreen(
+                                    modifier = Modifier.padding(padding),
+                                    city = (screenState as ScreenState.Map).city,
+                                    onBack = { viewModel.onBack() }
+                                )
+                            }
+                            is ScreenState.Detail -> {
+                                CityDetailScreen(
+                                    modifier = Modifier.padding(padding),
+                                    city = (screenState as ScreenState.Detail).city,
+                                    onBack = { viewModel.onBack() }
+                                )
+                            }
                         }
                     }
+
                 }
             }
         }
