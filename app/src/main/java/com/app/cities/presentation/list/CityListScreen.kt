@@ -49,7 +49,7 @@ fun CityListContent(
     onDetailClick: (City) -> Unit
 ) {
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = modifier.padding(8.dp)) {
 
         TextField(
             value = state.query,

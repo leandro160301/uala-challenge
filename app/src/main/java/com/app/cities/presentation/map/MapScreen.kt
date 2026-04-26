@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.app.cities.domain.model.City
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+
 
 @Composable
 fun MapScreen(
@@ -35,7 +35,7 @@ fun MapScreen(
         )
     }
 
-    Box(modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
 
         GoogleMap(
             modifier = Modifier.fillMaxSize(),

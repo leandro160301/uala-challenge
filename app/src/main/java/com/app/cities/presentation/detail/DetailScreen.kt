@@ -23,7 +23,7 @@ import com.app.cities.domain.model.City
 @Composable
 fun CityDetailScreen(
     city: City,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)?,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -34,17 +34,20 @@ fun CityDetailScreen(
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back"
+            onBack?.let {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+
+                Text(
+                    text = "City details",
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
-            Text(
-                text = "City details",
-                style = MaterialTheme.typography.titleLarge
-            )
         }
 
         Column(
