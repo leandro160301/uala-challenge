@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.app.cities.domain.usecase.GetCitiesUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
+import com.app.cities.domain.usecase.ToggleFavoriteUseCase
 
 class CityListViewModelFactory(
     private val getCitiesUseCase: GetCitiesUseCase,
-    private val searchCitiesUseCase: SearchCitiesUseCase
+    private val searchCitiesUseCase: SearchCitiesUseCase,
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -15,7 +17,8 @@ class CityListViewModelFactory(
         if (modelClass.isAssignableFrom(CityListViewModel::class.java)) {
             return CityListViewModel(
                 getCitiesUseCase,
-                searchCitiesUseCase
+                searchCitiesUseCase,
+                toggleFavoriteUseCase
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
