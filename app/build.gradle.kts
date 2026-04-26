@@ -60,4 +60,6 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.maps.compose)
+    implementation(libs.play.services.maps)
 }

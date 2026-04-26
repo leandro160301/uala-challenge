@@ -6,8 +6,6 @@ import com.app.cities.domain.model.City
 import com.app.cities.domain.usecase.GetCitiesUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -20,6 +18,9 @@ class CityListViewModel(
 ) : ViewModel() {
 
     private var allCities: List<City> = emptyList()
+
+    private val _selectedCity = MutableStateFlow<City?>(null)
+    val selectedCity: StateFlow<City?> = _selectedCity
 
     private val _uiState = MutableStateFlow(CityListUiState(isLoading = true))
     val uiState: StateFlow<CityListUiState> = _uiState
@@ -82,6 +83,14 @@ class CityListViewModel(
         }
 
         _uiState.value = currentState.copy(cities = filtered)
+    }
+
+    fun onCitySelected(city: City) {
+        _selectedCity.value = city
+    }
+
+    fun clearSelection() {
+        _selectedCity.value = null
     }
 
 }

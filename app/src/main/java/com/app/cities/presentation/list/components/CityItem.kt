@@ -16,7 +16,7 @@ import com.app.cities.domain.model.City
 @Composable
 fun CityItem(
     city: City,
-    onClick: () -> Unit = {},
+    onCityClick: (City) -> Unit,
     onFavoriteClick: () -> Unit
 ) {
     Row(
@@ -27,7 +27,7 @@ fun CityItem(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .clickable { onClick() }
+                .clickable { onCityClick(city) }
         ) {
             Text("${city.name}, ${city.country}")
             Text("Lat: ${city.lat}, Lon: ${city.lon}")

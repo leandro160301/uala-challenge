@@ -10,7 +10,8 @@ import com.app.cities.domain.model.City
 @Composable
 fun CityList(
     cities: List<City>,
-    onFavoriteClick: (Int) -> Unit
+    onFavoriteClick: (Int) -> Unit,
+    onCityClick: (City) -> Unit,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(
@@ -19,7 +20,8 @@ fun CityList(
         ) { city ->
             CityItem(
                 city = city,
-                onFavoriteClick = { onFavoriteClick(city.id) }
+                onFavoriteClick = { onFavoriteClick(city.id) },
+                onCityClick = onCityClick
             )
         }
     }

@@ -27,6 +27,8 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version = "1.6.0" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "1.1.1" }
+androidx-maps-compose = { group = "com.google.maps.android", name = "maps-compose", version = "4.3.0" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version = "18.2.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
