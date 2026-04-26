@@ -24,8 +24,6 @@ class CityListViewModel(
     private val _uiState = MutableStateFlow(CityListUiState(isLoading = true))
     val uiState: StateFlow<CityListUiState> = _uiState
 
-    private var searchJob: Job? = null
-
     init {
         loadCities()
     }
@@ -54,18 +52,7 @@ class CityListViewModel(
 
     fun onSearch(query: String) {
         _uiState.value = _uiState.value.copy(query = query)
-
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch(Dispatchers.Default) {
-            val result = searchCitiesUseCase(allCities, query)
-
-            _uiState.value = _uiState.value.copy(
-                cities = result
-            )
-        }
-
         applyFilters()
-
     }
 
     fun onToggleFavorite(cityId: Int) {
