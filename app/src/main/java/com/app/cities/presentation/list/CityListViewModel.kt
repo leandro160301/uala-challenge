@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class CityListViewModel(
@@ -28,21 +29,23 @@ class CityListViewModel(
     }
 
     fun loadCities() {
-        viewModelScope.launch(Dispatchers.Default) {
-            try {
-                val cities = getCitiesUseCase()
-                allCities = cities
+        viewModelScope.launch {
+            getCitiesUseCase()
+                .catch { e ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = e.message
+                    )
+                }
+                .collect { cities ->
+                    allCities = cities
 
-                _uiState.value = _uiState.value.copy(
-                    cities = cities,
-                    isLoading = false
-                )
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    error = e.message
-                )
-            }
+                    _uiState.value = _uiState.value.copy(
+                        cities = cities,
+                        isLoading = false,
+                        error = null
+                    )
+                }
         }
     }
 
