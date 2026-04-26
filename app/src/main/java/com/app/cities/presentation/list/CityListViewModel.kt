@@ -43,10 +43,11 @@ class CityListViewModel(
                     allCities = cities
 
                     _uiState.value = _uiState.value.copy(
-                        cities = cities,
                         isLoading = false,
                         error = null
                     )
+
+                    applyFilters()
                 }
         }
     }
@@ -62,6 +63,9 @@ class CityListViewModel(
                 cities = result
             )
         }
+
+        applyFilters()
+
     }
 
     fun onToggleFavorite(cityId: Int) {
@@ -69,4 +73,28 @@ class CityListViewModel(
             toggleFavoriteUseCase(cityId)
         }
     }
+
+    fun onToggleFavoritesFilter() {
+        _uiState.value = _uiState.value.copy(
+            showOnlyFavorites = !_uiState.value.showOnlyFavorites
+        )
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        val currentState = _uiState.value
+
+        var filtered = allCities
+
+        if (currentState.query.isNotEmpty()) {
+            filtered = searchCitiesUseCase(filtered, currentState.query)
+        }
+
+        if (currentState.showOnlyFavorites) {
+            filtered = filtered.filter { it.isFavorite }
+        }
+
+        _uiState.value = currentState.copy(cities = filtered)
+    }
+
 }

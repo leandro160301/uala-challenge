@@ -1,9 +1,11 @@
 package com.app.cities.presentation.list
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -28,7 +30,8 @@ fun CityListScreen(
         modifier = modifier,
         state = state,
         onSearch = { query -> viewModel.onSearch(query) },
-        onFavoriteClick = { cityId-> viewModel.onToggleFavorite(cityId) }
+        onFavoriteClick = { cityId -> viewModel.onToggleFavorite(cityId) },
+        onToggleFavoritesFilter = { viewModel.onToggleFavoritesFilter() },
     )
 }
 
@@ -37,9 +40,21 @@ fun CityListContent(
     state: CityListUiState,
     onSearch: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onFavoriteClick: (Int) -> Unit
+    onFavoriteClick: (Int) -> Unit,
+    onToggleFavoritesFilter: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
+
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text("Only favorites")
+
+            Switch(
+                checked = state.showOnlyFavorites,
+                onCheckedChange = { onToggleFavoritesFilter() }
+            )
+        }
 
         TextField(
             value = state.query,
@@ -77,7 +92,8 @@ fun CityListPreview() {
     CityListContent(
         state = fakeState,
         onSearch = {},
-        onFavoriteClick = {}
+        onFavoriteClick = {},
+        onToggleFavoritesFilter = {}
     )
 }
 
@@ -87,6 +103,7 @@ fun CityListLoadingPreview() {
     CityListContent(
         state = CityListUiState(isLoading = true),
         onSearch = {},
-        onFavoriteClick = {}
+        onFavoriteClick = {},
+        onToggleFavoritesFilter = {}
     )
 }
