@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                                 MapScreen(
                                     modifier = Modifier.weight(1f),
                                     city = city,
-                                    onBack = {}
+                                    onBack = null
                                 )
                             }
                         }

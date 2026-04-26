@@ -11,6 +11,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,28 +48,33 @@ fun CityListContent(
     onCityClick: (City) -> Unit,
     onDetailClick: (City) -> Unit
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+
+    Column(modifier = Modifier.padding(8.dp)) {
+
+        TextField(
+            value = state.query,
+            onValueChange = onSearch,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text("Search city...") },
+            singleLine = true
+        )
 
         Row(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Only favorites")
+            Text(
+                text = "Only favorites",
+                modifier = Modifier.weight(1f)
+            )
 
             Switch(
                 checked = state.showOnlyFavorites,
                 onCheckedChange = { onToggleFavoritesFilter() }
             )
         }
-
-        TextField(
-            value = state.query,
-            onValueChange = onSearch,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            placeholder = { Text("Search city...") },
-            singleLine = true
-        )
 
         when {
             state.isLoading -> LoadingView()
@@ -80,7 +86,9 @@ fun CityListContent(
                 onDetailClick = onDetailClick
             )
         }
+
     }
+
 }
 
 @Preview(showBackground = true)

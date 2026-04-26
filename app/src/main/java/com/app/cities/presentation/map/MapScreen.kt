@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.app.cities.domain.model.City
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -19,13 +21,17 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun MapScreen(
     city: City,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)?,
     modifier: Modifier = Modifier
 ) {
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(
-            LatLng(city.lat, city.lon),
-            10f
+    val cameraPositionState = rememberCameraPositionState()
+
+    LaunchedEffect(city) {
+        cameraPositionState.animate(
+            update = CameraUpdateFactory.newLatLngZoom(
+                LatLng(city.lat, city.lon),
+                10f
+            )
         )
     }
 
@@ -43,11 +49,13 @@ fun MapScreen(
             )
         }
 
-        Button(
-            onClick = onBack,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Back")
+        onBack?.let {
+            Button(
+                onClick = it,
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text("Back")
+            }
         }
     }
 }
