@@ -11,6 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -39,12 +42,14 @@ class CityListViewModel(
             combine(
                 getCitiesUseCase(),
                 getFavoriteIdsUseCase(),
-                queryFlow,
+                queryFlow
+                    .debounce(300)
+                    .distinctUntilChanged(),
                 showFavoritesFlow
             ) { cities, favorites, query, showOnlyFavorites ->
                 FilterParams(cities, favorites, query, showOnlyFavorites)
             }
-                .collect { params ->
+                .mapLatest { params ->
 
                     val filtered = withContext(Dispatchers.Default) {
                         var result = params.cities
@@ -60,15 +65,18 @@ class CityListViewModel(
                         result
                     }
 
-                    _uiState.value = CityListUiState(
+                    _uiState.value.copy(
                         cities = filtered,
                         query = params.query,
                         showOnlyFavorites = params.showOnlyFavorites,
-                        isLoading = false,
-                        error = null,
                         hasFavorites = params.favorites.isNotEmpty(),
-                        favoriteIds = params.favorites
+                        favoriteIds = params.favorites,
+                        isLoading = false,
+                        error = null
                     )
+                }
+                .collect { newState ->
+                    _uiState.value = newState
                 }
         }
     }
@@ -81,6 +89,10 @@ class CityListViewModel(
 
     fun onSearch(query: String) {
         queryFlow.value = query
+
+        _uiState.value = _uiState.value.copy(
+            query = query
+        )
     }
 
     fun onToggleFavoritesFilter() {
