@@ -10,6 +10,7 @@ import com.app.cities.domain.model.City
 @Composable
 fun CityList(
     cities: List<City>,
+    favoriteIds: Set<Int>,
     selectedCityId: Int?,
     onFavoriteClick: (Int) -> Unit,
     onCityClick: (City) -> Unit,
@@ -23,6 +24,7 @@ fun CityList(
             CityItem(
                 city = city,
                 isSelected = city.id == selectedCityId,
+                isFavorite = favoriteIds.contains(city.id),
                 onFavoriteClick = { onFavoriteClick(city.id) },
                 onCityClick = onCityClick,
                 onDetailClick = onDetailClick

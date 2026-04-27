@@ -142,7 +142,8 @@ fun CityListContent(
                     selectedCityId = state.selectedCityId,
                     onFavoriteClick = onFavoriteClick,
                     onCityClick = onCityClick,
-                    onDetailClick = onDetailClick
+                    onDetailClick = onDetailClick,
+                    favoriteIds = state.favoriteIds
                 )
             }
         }

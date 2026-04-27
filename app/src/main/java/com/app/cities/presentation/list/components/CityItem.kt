@@ -25,6 +25,7 @@ import com.app.cities.domain.model.City
 fun CityItem(
     city: City,
     isSelected: Boolean,
+    isFavorite: Boolean,
     onCityClick: (City) -> Unit,
     onFavoriteClick: () -> Unit,
     onDetailClick: (City) -> Unit,
@@ -61,7 +62,7 @@ fun CityItem(
 
             IconButton(onClick = onFavoriteClick) {
                 Icon(
-                    imageVector = if (city.isFavorite)
+                    imageVector = if (isFavorite)
                         Icons.Default.Star
                     else
                         Icons.Default.StarBorder,

@@ -9,5 +9,6 @@ data class CityListUiState(
     val error: String? = null,
     val showOnlyFavorites: Boolean = false,
     val selectedCityId: Int? = null,
-    val hasFavorites: Boolean = false
+    val hasFavorites: Boolean = false,
+    val favoriteIds: Set<Int> = emptySet()
 )

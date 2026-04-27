@@ -55,7 +55,8 @@ class CityListViewModel(
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = null,
-                        hasFavorites = favorites.isNotEmpty()
+                        hasFavorites = favorites.isNotEmpty(),
+                        favoriteIds = favorites
                     )
 
                     applyFilters()
