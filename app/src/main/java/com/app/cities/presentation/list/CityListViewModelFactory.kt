@@ -3,13 +3,15 @@ package com.app.cities.presentation.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.app.cities.domain.usecase.GetCitiesUseCase
+import com.app.cities.domain.usecase.GetFavoriteIdsUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
 
 class CityListViewModelFactory(
     private val getCitiesUseCase: GetCitiesUseCase,
     private val searchCitiesUseCase: SearchCitiesUseCase,
-    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
+    private val getFavoriteIdsUseCase: GetFavoriteIdsUseCase
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -18,7 +20,8 @@ class CityListViewModelFactory(
             return CityListViewModel(
                 getCitiesUseCase,
                 searchCitiesUseCase,
-                toggleFavoriteUseCase
+                toggleFavoriteUseCase,
+                getFavoriteIdsUseCase
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

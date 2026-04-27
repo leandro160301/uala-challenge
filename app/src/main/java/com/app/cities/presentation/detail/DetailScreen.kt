@@ -66,7 +66,7 @@ fun CityDetailScreen(
 @Composable
 fun CityListLoadingPreview() {
     CityDetailScreen(
-        city = City(id = 1,"Buenos Aires", "AR", -50.2, -68.4, "buenos aires", false),
+        city = City(id = 1,"Buenos Aires", "AR", -50.2, -68.4, "buenos aires"),
         onBack = {  },
     )
 }

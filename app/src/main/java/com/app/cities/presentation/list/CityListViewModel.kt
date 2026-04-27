@@ -4,20 +4,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.cities.domain.model.City
 import com.app.cities.domain.usecase.GetCitiesUseCase
+import com.app.cities.domain.usecase.GetFavoriteIdsUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class CityListViewModel(
     private val getCitiesUseCase: GetCitiesUseCase,
     private val searchCitiesUseCase: SearchCitiesUseCase,
-    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
+    private val getFavoriteIdsUseCase: GetFavoriteIdsUseCase
 ) : ViewModel() {
 
     private var allCities: List<City> = emptyList()
+
+    private var favoriteIds: Set<Int> = emptySet()
 
     private val _screenState = MutableStateFlow<ScreenState>(ScreenState.List)
     val screenState: StateFlow<ScreenState> = _screenState
@@ -31,19 +36,26 @@ class CityListViewModel(
 
     fun loadCities() {
         viewModelScope.launch {
-            getCitiesUseCase()
+            combine(
+                getCitiesUseCase(),
+                getFavoriteIdsUseCase()
+            ) { cities, favorites ->
+                cities to favorites
+            }
                 .catch { e ->
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = e.message
                     )
                 }
-                .collect { cities ->
+                .collect { (cities, favorites) ->
                     allCities = cities
+                    favoriteIds = favorites
 
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        error = null
+                        error = null,
+                        hasFavorites = favorites.isNotEmpty()
                     )
 
                     applyFilters()
@@ -79,14 +91,11 @@ class CityListViewModel(
         }
 
         if (currentState.showOnlyFavorites) {
-            filtered = filtered.filter { it.isFavorite }
+            filtered = filtered.filter { favoriteIds.contains(it.id) }
         }
 
-        val hasFavorites = allCities.any { it.isFavorite }
-
         _uiState.value = currentState.copy(
-            cities = filtered,
-            hasFavorites = hasFavorites
+            cities = filtered
         )
     }
 

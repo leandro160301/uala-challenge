@@ -29,6 +29,7 @@ import com.app.cities.data.local.FavoritesLocalDataSource
 import com.app.cities.data.remote.CityRemoteDataSource
 import com.app.cities.data.repository.CityRepositoryImpl
 import com.app.cities.domain.usecase.GetCitiesUseCase
+import com.app.cities.domain.usecase.GetFavoriteIdsUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
 import com.app.cities.presentation.detail.CityDetailScreen
@@ -55,7 +56,8 @@ class MainActivity : ComponentActivity() {
         CityListViewModelFactory(
             getCitiesUseCase = GetCitiesUseCase(repository),
             searchCitiesUseCase = SearchCitiesUseCase(),
-            toggleFavoriteUseCase = ToggleFavoriteUseCase(repository)
+            toggleFavoriteUseCase = ToggleFavoriteUseCase(repository),
+            getFavoriteIdsUseCase = GetFavoriteIdsUseCase(repository),
         )
     }
 

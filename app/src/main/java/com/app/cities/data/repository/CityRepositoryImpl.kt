@@ -7,8 +7,8 @@ import com.app.cities.domain.model.City
 import com.app.cities.domain.repository.CityRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 
 class CityRepositoryImpl(
     private val remoteDataSource: CityRemoteDataSource,
@@ -17,22 +17,20 @@ class CityRepositoryImpl(
 
     private var cachedCities: List<City>? = null
 
-    override fun getCities(): Flow<List<City>> =
-        favoritesLocalDataSource.favorites
-            .map { favoriteIds ->
+    override fun getCities(): Flow<List<City>> = flow {
+        val cities = cachedCities ?: remoteDataSource.fetchCities()
+            .map { it.toDomain() }
+            .sortedWith(compareBy({ it.normalizedName }, { it.country }))
+            .also { cachedCities = it }
 
-                val cities = cachedCities ?: remoteDataSource.fetchCities()
-                    .map { it.toDomain() }
-                    .sortedWith(compareBy({ it.normalizedName }, { it.country }))
-                    .also { cachedCities = it }
-
-                cities.map { city ->
-                    city.copy(isFavorite = favoriteIds.contains(city.id))
-                }
-            }
-            .flowOn(Dispatchers.IO)
+        emit(cities)
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun toggleFavorite(cityId: Int) {
         favoritesLocalDataSource.toggleFavorite(cityId)
+    }
+
+    override fun getFavoriteIds(): Flow<Set<Int>> {
+        return favoritesLocalDataSource.favorites
     }
 }

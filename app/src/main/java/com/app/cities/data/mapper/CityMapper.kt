@@ -11,8 +11,7 @@ fun CityDto.toDomain(): City {
         country = country,
         lat = coord.lat,
         lon = coord.lon,
-        normalizedName = normalize(name),
-        isFavorite = false
+        normalizedName = normalize(name)
     )
 }
 
