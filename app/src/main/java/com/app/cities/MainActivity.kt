@@ -25,13 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import com.app.cities.data.local.FavoritesLocalDataSource
-import com.app.cities.data.remote.CityRemoteDataSource
-import com.app.cities.data.repository.CityRepositoryImpl
-import com.app.cities.domain.usecase.GetCitiesUseCase
-import com.app.cities.domain.usecase.GetFavoriteIdsUseCase
-import com.app.cities.domain.usecase.SearchCitiesUseCase
-import com.app.cities.domain.usecase.ToggleFavoriteUseCase
 import com.app.cities.presentation.detail.CityDetailScreen
 import com.app.cities.presentation.list.CityListScreen
 import com.app.cities.presentation.list.CityListViewModel
@@ -42,22 +35,16 @@ import com.app.cities.ui.theme.CitiesAppTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val remoteDataSource by lazy { CityRemoteDataSource() }
-    private val favoritesLocalDataSource by lazy { FavoritesLocalDataSource(applicationContext) }
-
-    private val repository by lazy {
-        CityRepositoryImpl(
-            remoteDataSource,
-            favoritesLocalDataSource
-        )
+    private val container by lazy {
+        (application as CitiesApp).container
     }
 
     private val viewModel by viewModels<CityListViewModel> {
         CityListViewModelFactory(
-            getCitiesUseCase = GetCitiesUseCase(repository),
-            searchCitiesUseCase = SearchCitiesUseCase(),
-            toggleFavoriteUseCase = ToggleFavoriteUseCase(repository),
-            getFavoriteIdsUseCase = GetFavoriteIdsUseCase(repository),
+            getCitiesUseCase = container.getCitiesUseCase,
+            searchCitiesUseCase = container.searchCitiesUseCase,
+            toggleFavoriteUseCase = container.toggleFavoriteUseCase,
+            getFavoriteIdsUseCase = container.getFavoriteIdsUseCase,
         )
     }
 
