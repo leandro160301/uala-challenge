@@ -1,12 +1,24 @@
 package com.app.cities.presentation.list
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,62 +60,93 @@ fun CityListContent(
     onCityClick: (City) -> Unit,
     onDetailClick: (City) -> Unit
 ) {
+    Column(modifier = modifier.fillMaxSize()) {
 
-    Column(modifier = modifier.padding(8.dp)) {
-
-        TextField(
-            value = state.query,
-            onValueChange = onSearch,
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Search city...") },
-            singleLine = true
-        )
-
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            Text(
-                text = "Only favorites",
-                modifier = Modifier.weight(1f)
+            OutlinedTextField(
+                value = state.query,
+                onValueChange = onSearch,
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = {
+                    Text(
+                        text = "Search city...",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                },
+                trailingIcon = {
+                    if (state.query.isNotEmpty()) {
+                        IconButton(onClick = { onSearch("") }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "Clear search",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp)
             )
 
-            Switch(
-                checked = state.showOnlyFavorites,
-                onCheckedChange = { onToggleFavoritesFilter() }
-            )
-        }
+            Spacer(modifier = Modifier.height(12.dp))
 
-        when {
-            state.isLoading -> LoadingView()
-            state.error != null -> ErrorView(message = state.error)
-            state.cities.isEmpty() -> {
-                val message = when {
-                    state.showOnlyFavorites && !state.hasFavorites ->
-                        "No favorites yet"
-
-                    state.showOnlyFavorites && state.query.isNotEmpty() ->
-                        "No favorite cities match your search"
-
-                    else ->
-                        "No cities found"
-                }
-
-                EmptyView(message = message)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Only favorites",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f)
+                )
+                Switch(
+                    checked = state.showOnlyFavorites,
+                    onCheckedChange = { onToggleFavoritesFilter() }
+                )
             }
-            else -> CityList(
-                cities = state.cities,
-                selectedCityId = state.selectedCityId,
-                onFavoriteClick = onFavoriteClick,
-                onCityClick = onCityClick,
-                onDetailClick = onDetailClick
-            )
         }
 
-    }
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+        )
 
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
+            when {
+                state.isLoading -> LoadingView()
+                state.error != null -> ErrorView(message = state.error)
+                state.cities.isEmpty() -> {
+                    val message = when {
+                        state.showOnlyFavorites && !state.hasFavorites ->
+                            "No favorites yet"
+                        state.showOnlyFavorites && state.query.isNotEmpty() ->
+                            "No favorite cities match your search"
+                        else ->
+                            "No cities found"
+                    }
+                    EmptyView(message = message)
+                }
+                else -> CityList(
+                    cities = state.cities,
+                    selectedCityId = state.selectedCityId,
+                    onFavoriteClick = onFavoriteClick,
+                    onCityClick = onCityClick,
+                    onDetailClick = onDetailClick
+                )
+            }
+        }
+    }
 }
 
 @Preview(showBackground = true)
