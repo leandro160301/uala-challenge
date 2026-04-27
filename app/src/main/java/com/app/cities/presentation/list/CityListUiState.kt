@@ -8,5 +8,6 @@ data class CityListUiState(
     val query: String = "",
     val error: String? = null,
     val showOnlyFavorites: Boolean = false,
-    val selectedCityId: Int? = null
+    val selectedCityId: Int? = null,
+    val hasFavorites: Boolean = false
 )

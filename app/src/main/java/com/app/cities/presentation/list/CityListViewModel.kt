@@ -82,7 +82,12 @@ class CityListViewModel(
             filtered = filtered.filter { it.isFavorite }
         }
 
-        _uiState.value = currentState.copy(cities = filtered)
+        val hasFavorites = allCities.any { it.isFavorite }
+
+        _uiState.value = currentState.copy(
+            cities = filtered,
+            hasFavorites = hasFavorites
+        )
     }
 
     fun onCitySelected(city: City) {

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.cities.domain.model.City
+import com.app.cities.presentation.common.EmptyView
 import com.app.cities.presentation.common.ErrorView
 import com.app.cities.presentation.common.LoadingView
 import com.app.cities.presentation.list.components.CityList
@@ -78,6 +79,20 @@ fun CityListContent(
         when {
             state.isLoading -> LoadingView()
             state.error != null -> ErrorView(message = state.error)
+            state.cities.isEmpty() -> {
+                val message = when {
+                    state.showOnlyFavorites && !state.hasFavorites ->
+                        "No favorites yet"
+
+                    state.showOnlyFavorites && state.query.isNotEmpty() ->
+                        "No favorite cities match your search"
+
+                    else ->
+                        "No cities found"
+                }
+
+                EmptyView(message = message)
+            }
             else -> CityList(
                 cities = state.cities,
                 selectedCityId = state.selectedCityId,
