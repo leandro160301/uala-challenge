@@ -7,11 +7,13 @@ import com.app.cities.domain.usecase.GetCitiesUseCase
 import com.app.cities.domain.usecase.GetFavoriteIdsUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CityListViewModel(
     private val getCitiesUseCase: GetCitiesUseCase,
@@ -66,7 +68,10 @@ class CityListViewModel(
 
     fun onSearch(query: String) {
         _uiState.value = _uiState.value.copy(query = query)
-        applyFilters()
+
+        viewModelScope.launch {
+            applyFilters()
+        }
     }
 
     fun onToggleFavorite(cityId: Int) {
@@ -79,20 +84,26 @@ class CityListViewModel(
         _uiState.value = _uiState.value.copy(
             showOnlyFavorites = !_uiState.value.showOnlyFavorites
         )
-        applyFilters()
+        viewModelScope.launch {
+            applyFilters()
+        }
     }
 
-    private fun applyFilters() {
+    private suspend fun applyFilters() {
         val currentState = _uiState.value
 
-        var filtered = allCities
+        val filtered = withContext(Dispatchers.Default) {
+            var result = allCities
 
-        if (currentState.query.isNotEmpty()) {
-            filtered = searchCitiesUseCase(filtered, currentState.query)
-        }
+            if (currentState.query.isNotEmpty()) {
+                result = searchCitiesUseCase(result, currentState.query)
+            }
 
-        if (currentState.showOnlyFavorites) {
-            filtered = filtered.filter { favoriteIds.contains(it.id) }
+            if (currentState.showOnlyFavorites) {
+                result = result.filter { favoriteIds.contains(it.id) }
+            }
+
+            result
         }
 
         _uiState.value = currentState.copy(
