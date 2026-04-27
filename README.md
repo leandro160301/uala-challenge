@@ -96,6 +96,21 @@ Reason:
 
 ---
 
+## Dependency Injection
+
+This project does not use a DI framework such as Hilt or Koin.
+
+Instead, dependencies are manually wired in the entry point (MainActivity).
+
+Reasoning:
+
+- The project scope is intentionally small and self-contained
+- Manual DI keeps the dependency graph explicit and easy to follow
+- Avoids unnecessary abstraction layers for a single-feature application
+- Reduces framework overhead for a codebase that does not require dynamic injection graphs
+
+---
+
 ##  Persistence (Favorites)
 
 Favorites are stored using **DataStore (Preferences)**.
