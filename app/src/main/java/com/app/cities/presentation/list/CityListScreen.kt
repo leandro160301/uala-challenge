@@ -35,7 +35,9 @@ import com.app.cities.presentation.list.components.CityList
 @Composable
 fun CityListScreen(
     viewModel: CityListViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCityClick: (City) -> Unit,
+    onDetailClick: (City) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -45,8 +47,8 @@ fun CityListScreen(
         onSearch = { query -> viewModel.onSearch(query) },
         onFavoriteClick = { cityId -> viewModel.onToggleFavorite(cityId) },
         onToggleFavoritesFilter = { viewModel.onToggleFavoritesFilter() },
-        onCityClick = { city -> viewModel.onCitySelected(city) },
-        onDetailClick = { city -> viewModel.onCityDetailSelected(city) }
+        onCityClick = onCityClick,
+        onDetailClick = onDetailClick
     )
 }
 

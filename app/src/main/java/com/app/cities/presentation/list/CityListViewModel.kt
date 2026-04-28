@@ -27,9 +27,6 @@ class CityListViewModel(
     private val queryFlow = MutableStateFlow("")
     private val showFavoritesFlow = MutableStateFlow(false)
 
-    private val _screenState = MutableStateFlow<ScreenState>(ScreenState.List)
-    val screenState: StateFlow<ScreenState> = _screenState
-
     private val _uiState = MutableStateFlow(CityListUiState(isLoading = true))
     val uiState: StateFlow<CityListUiState> = _uiState
 
@@ -81,6 +78,11 @@ class CityListViewModel(
         }
     }
 
+    fun getCityById(id: Int): City {
+        return uiState.value.cities.first { it.id == id }
+    }
+
+
     fun onToggleFavorite(cityId: Int) {
         viewModelScope.launch {
             toggleFavoriteUseCase(cityId)
@@ -101,17 +103,10 @@ class CityListViewModel(
 
     fun onCitySelected(city: City) {
         _uiState.value = _uiState.value.copy(selectedCityId = city.id)
-        _screenState.value = ScreenState.Map(city)
     }
 
     fun onCityDetailSelected(city: City) {
         _uiState.value = _uiState.value.copy(selectedCityId = city.id)
-        _screenState.value = ScreenState.Detail(city)
-    }
-
-    fun onBack() {
-        _screenState.value = ScreenState.List
-        _uiState.value = _uiState.value.copy(selectedCityId = null)
     }
 
 }
