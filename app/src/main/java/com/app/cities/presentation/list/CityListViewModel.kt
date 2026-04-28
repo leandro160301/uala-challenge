@@ -102,11 +102,24 @@ class CityListViewModel(
     }
 
     fun onCitySelected(city: City) {
-        _uiState.value = _uiState.value.copy(selectedCityId = city.id)
+        _uiState.value = _uiState.value.copy(
+            selectedCityId = city.id,
+            selectedPanel = SelectedPanel.Map(city.id)
+        )
     }
 
     fun onCityDetailSelected(city: City) {
-        _uiState.value = _uiState.value.copy(selectedCityId = city.id)
+        _uiState.value = _uiState.value.copy(
+            selectedCityId = city.id,
+            selectedPanel = SelectedPanel.Detail(city.id)
+        )
+    }
+
+    fun clearSelection() {
+        _uiState.value = _uiState.value.copy(
+            selectedCityId = null,
+            selectedPanel = SelectedPanel.None
+        )
     }
 
 }
