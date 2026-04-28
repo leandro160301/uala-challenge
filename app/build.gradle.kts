@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-
     alias(libs.plugins.kotlin.serialization)
+    // *CAMBIO* kotlin.android se omite intencionalmente: AGP 9.x + kotlin.compose
+    // ya registran la extensión 'kotlin' — aplicarlo causaría extensión duplicada
 }
 
 android {
@@ -51,6 +52,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     testImplementation(libs.junit)
+    // *CAMBIO* dependencias de test unitario: coroutines, mockito, turbine y lifecycle
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.androidx.lifecycle.testing)
+    testImplementation(libs.app.cash.turbine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
