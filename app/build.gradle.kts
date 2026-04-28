@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    // *CAMBIO* kotlin.android se omite intencionalmente: AGP 9.x + kotlin.compose
-    // ya registran la extensión 'kotlin' — aplicarlo causaría extensión duplicada
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -52,7 +52,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     testImplementation(libs.junit)
-    // *CAMBIO* dependencias de test unitario: coroutines, mockito, turbine y lifecycle
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.androidx.lifecycle.testing)
@@ -70,4 +69,8 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 }

@@ -7,9 +7,9 @@ import org.junit.Test
 class SearchTest {
 
     private fun defaultCities(): List<City> = listOf(
-        City(1, "Alabama", "US", 0.0, 0.0, "alabama", isFavorite = false),
-        City(2, "Albuquerque", "US", 0.0, 0.0, "albuquerque", isFavorite = false),
-        City(3, "Berlin", "DE", 0.0, 0.0, "berlin", isFavorite = false)
+        City(1, "Alabama", "US", 0.0, 0.0, "alabama"),
+        City(2, "Albuquerque", "US", 0.0, 0.0, "albuquerque"),
+        City(3, "Berlin", "DE", 0.0, 0.0, "berlin")
     )
 
     @Test
@@ -51,8 +51,8 @@ class SearchTest {
     @Test
     fun `does not match substrings that are not prefix`() {
         val cities = listOf(
-            City(1, "New York", "US", 0.0, 0.0, "new york", isFavorite = false),
-            City(2, "York", "UK", 0.0, 0.0, "york", isFavorite = false)
+            City(1, "New York", "US", 0.0, 0.0, "new york"),
+            City(2, "York", "UK", 0.0, 0.0, "york")
         )
 
         val result = searchByPrefix(cities, "York")
@@ -64,7 +64,7 @@ class SearchTest {
     @Test
     fun `matches cities ignoring accents`() {
         val cities = listOf(
-            City(1, "São Paulo", "BR", 0.0, 0.0, "sao paulo", isFavorite = false)
+            City(1, "São Paulo", "BR", 0.0, 0.0, "sao paulo")
         )
 
         val result = searchByPrefix(cities, "sao")
@@ -100,8 +100,8 @@ class SearchTest {
     @Test
     fun `results preserve alphabetical order`() {
         val cities = listOf(
-            City(1, "Albuquerque", "US", 0.0, 0.0, "albuquerque", false),
-            City(2, "Alabama", "US", 0.0, 0.0, "alabama", false)
+            City(1, "Albuquerque", "US", 0.0, 0.0, "albuquerque"),
+            City(2, "Alabama", "US", 0.0, 0.0, "alabama")
         ).sortedBy { it.normalizedName }
 
         val result = searchByPrefix(cities, "Al")
