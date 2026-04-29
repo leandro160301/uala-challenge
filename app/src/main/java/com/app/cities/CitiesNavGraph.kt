@@ -6,8 +6,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -77,18 +82,26 @@ private fun LandscapeLayout(
 
                 is SelectedPanel.Map -> {
                     val city = viewModel.getCityById(panel.cityId)
-                    MapScreen(
-                        city = city,
-                        onBack = null,
-                    )
+                    if (city != null) {
+                        MapScreen(
+                            city = city,
+                            onBack = null,
+                        )
+                    } else {
+                        CityNotFoundScreen(onBack = null)
+                    }
                 }
 
                 is SelectedPanel.Detail -> {
                     val city = viewModel.getCityById(panel.cityId)
-                    CityDetailScreen(
-                        city = city,
-                        onBack = null,
-                    )
+                    if (city != null) {
+                        CityDetailScreen(
+                            city = city,
+                            onBack = null,
+                        )
+                    } else {
+                        CityNotFoundScreen(onBack = null)
+                    }
                 }
             }
         }
@@ -139,13 +152,23 @@ private fun PortraitLayout(viewModel: CityListViewModel) {
             val cityId = backStackEntry.arguments?.getInt("cityId")
                 ?: return@composable
 
-            MapScreen(
-                city = viewModel.getCityById(cityId),
-                onBack = {
-                    viewModel.clearSelection()
-                    navController.popBackStack()
-                },
-            )
+            val city = viewModel.getCityById(cityId)
+            if (city != null) {
+                MapScreen(
+                    city = city,
+                    onBack = {
+                        viewModel.clearSelection()
+                        navController.popBackStack()
+                    },
+                )
+            } else {
+                CityNotFoundScreen(
+                    onBack = {
+                        viewModel.clearSelection()
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
 
         composable(
@@ -155,13 +178,45 @@ private fun PortraitLayout(viewModel: CityListViewModel) {
             val cityId = backStackEntry.arguments?.getInt("cityId")
                 ?: return@composable
 
-            CityDetailScreen(
-                city = viewModel.getCityById(cityId),
-                onBack = {
-                    viewModel.clearSelection()
-                    navController.popBackStack()
-                },
+            val city = viewModel.getCityById(cityId)
+            if (city != null) {
+                CityDetailScreen(
+                    city = city,
+                    onBack = {
+                        viewModel.clearSelection()
+                        navController.popBackStack()
+                    },
+                )
+            } else {
+                CityNotFoundScreen(
+                    onBack = {
+                        viewModel.clearSelection()
+                        navController.popBackStack()
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun CityNotFoundScreen(onBack: (() -> Unit)? = null) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "City not found",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.error,
             )
+            if (onBack != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = onBack) {
+                    Text(text = "Go Back")
+                }
+            }
         }
     }
 }

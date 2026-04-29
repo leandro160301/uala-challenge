@@ -30,6 +30,8 @@ class CityListViewModel @Inject constructor(
     private val queryFlow = MutableStateFlow("")
     private val showFavoritesFlow = MutableStateFlow(false)
 
+    private var allCities: List<City> = emptyList()
+
     private val _uiState = MutableStateFlow(CityListUiState(isLoading = true))
     val uiState: StateFlow<CityListUiState> = _uiState
 
@@ -50,6 +52,8 @@ class CityListViewModel @Inject constructor(
                 FilterParams(cities, favorites, query, showOnlyFavorites)
             }
                 .mapLatest { params ->
+
+                    allCities = params.cities
 
                     val filtered = withContext(Dispatchers.Default) {
                         var result = params.cities
@@ -81,8 +85,8 @@ class CityListViewModel @Inject constructor(
         }
     }
 
-    fun getCityById(id: Int): City {
-        return uiState.value.cities.first { it.id == id }
+    fun getCityById(id: Int): City? {
+        return allCities.firstOrNull { it.id == id }
     }
 
 
