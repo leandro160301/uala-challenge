@@ -35,6 +35,35 @@ This is why the search remains very responsive even with ~200k entries.
 
 ---
 
+## Data Handling Strategy
+
+For the purposes of this challenge, **search latency was prioritised over initial loading time and memory usage**.
+
+The full dataset (~200k cities) is loaded into memory and kept cached to enable:
+
+- Instant prefix-based searches
+- Predictable performance (`O(log n + k)`)
+- No UI blocking during filtering
+
+---
+
+### Trade-offs
+
+- Higher memory consumption
+- No incremental loading
+
+---
+
+### Production Consideration
+
+In a real-world scenario, this approach could evolve into a **Room + Paging 3** solution to support:
+
+- Incremental data loading
+- Persistence across sessions
+- Better memory efficiency for very large datasets
+
+---
+
 ##  Normalization
 
 To ensure consistent and user-friendly search behavior, we normalize both:
@@ -98,16 +127,20 @@ Reason:
 
 ## Dependency Injection
 
-This project does not use a DI framework such as Hilt or Koin.
+The project uses **Hilt** for dependency injection.
 
-Instead, dependencies are manually wired in the entry point (MainActivity).
+Reasons for using Hilt:
 
-Reasoning:
+- Reduces boilerplate compared to manual DI
+- Lifecycle-aware components (ViewModel integration)
+- Scales better as the project grows
+- Improves testability and modularity
 
-- The project scope is intentionally small and self-contained
-- Manual DI keeps the dependency graph explicit and easy to follow
-- Avoids unnecessary abstraction layers for a single-feature application
-- Reduces framework overhead for a codebase that does not require dynamic injection graphs
+Hilt is used to provide:
+
+- Repository implementations
+- Use cases
+- Data sources
 
 ---
 
@@ -122,28 +155,6 @@ Reason for choosing DataStore over SharedPreferences:
 * Better suited for reactive flows
 
 Favorites are exposed as a `Flow`, allowing the UI to update automatically when they change.
-
----
-
-##  Performance Decisions
-
-### In-memory caching
-
-The city list is:
-
-* Loaded once
-* Stored in memory
-* Reused for all searches
-
-This avoids:
-
-* Re-fetching data
-* Re-processing the list repeatedly
-
-Trade-off:
-
-* Slightly higher memory usage
-* Much faster search and filtering
 
 ---
 
@@ -192,6 +203,23 @@ Unit tests were implemented for:
 * Edge cases (empty strings)
 
 These tests ensure that the core search behavior is reliable and correct.
+
+---
+
+## Navigation
+
+Navigation is implemented using **Navigation Compose**.
+
+This allows:
+
+- Declarative navigation
+- Better integration with Compose state
+- Cleaner handling of screen transitions
+
+The app supports:
+
+- Portrait mode: navigation between list and detail/map screens
+- Landscape mode: split view (list + map simultaneously)
 
 ---
 
