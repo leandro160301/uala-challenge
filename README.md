@@ -196,25 +196,45 @@ This allows:
 
 ---
 
-##  Testing
+## Testing
 
-Unit tests were implemented for:
+The project includes both **unit tests** and **UI tests**.
 
-### Search logic
+### Unit Tests
 
-* Prefix matching
-* Case insensitivity
-* Empty query behavior
-* No-results scenarios
-* Accent handling
+Focused on core business logic:
 
-### Normalization
+#### Search logic
 
-* Lowercasing
-* Removing accents
-* Edge cases (empty strings)
+- Prefix matching
+- Case insensitivity
+- Empty query behavior
+- No-results scenarios
+- Accent handling
+
+#### Normalization
+
+- Lowercasing
+- Removing accents
+- Edge cases (empty strings)
 
 These tests ensure that the core search behavior is reliable and correct.
+
+---
+
+### UI Tests (Compose)
+
+UI behavior is verified using **Jetpack Compose testing APIs** (`androidTest`).
+
+Covered scenarios include:
+
+- Different UI states (loading, empty, success)
+- Search input interactions
+- Favorites filter interactions
+- Detail screen rendering
+- Navigation callbacks (e.g. back action)
+
+These tests help ensure that the UI behaves correctly and responds to user interactions as expected.
 
 ---
 
