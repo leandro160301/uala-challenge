@@ -7,6 +7,8 @@ import com.app.cities.domain.usecase.GetCitiesUseCase
 import com.app.cities.domain.usecase.GetFavoriteIdsUseCase
 import com.app.cities.domain.usecase.SearchCitiesUseCase
 import com.app.cities.domain.usecase.ToggleFavoriteUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +19,8 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CityListViewModel(
+@HiltViewModel
+class CityListViewModel @Inject constructor(
     private val getCitiesUseCase: GetCitiesUseCase,
     private val searchCitiesUseCase: SearchCitiesUseCase,
     private val toggleFavoriteUseCase: ToggleFavoriteUseCase,

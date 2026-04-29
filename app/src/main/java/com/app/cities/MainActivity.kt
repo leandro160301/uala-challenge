@@ -6,23 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.app.cities.presentation.list.CityListViewModel
-import com.app.cities.presentation.list.CityListViewModelFactory
 import com.app.cities.ui.theme.CitiesAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val container by lazy {
-        (application as CitiesApp).container
-    }
-
-    private val viewModel by viewModels<CityListViewModel> {
-        CityListViewModelFactory(
-            getCitiesUseCase = container.getCitiesUseCase,
-            searchCitiesUseCase = container.searchCitiesUseCase,
-            toggleFavoriteUseCase = container.toggleFavoriteUseCase,
-            getFavoriteIdsUseCase = container.getFavoriteIdsUseCase,
-        )
-    }
+    private val viewModel: CityListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
