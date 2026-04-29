@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -125,6 +126,23 @@ private fun LandscapePlaceholder() {
 @Composable
 private fun PortraitLayout(viewModel: CityListViewModel) {
     val navController = rememberNavController()
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        when (val panel = uiState.selectedPanel) {
+            is SelectedPanel.Map -> {
+                navController.navigate(Screen.Map.createRoute(panel.cityId)) {
+                    launchSingleTop = true
+                }
+            }
+            is SelectedPanel.Detail -> {
+                navController.navigate(Screen.Detail.createRoute(panel.cityId)) {
+                    launchSingleTop = true
+                }
+            }
+            is SelectedPanel.None -> {}
+        }
+    }
 
     NavHost(
         navController = navController,
@@ -136,11 +154,15 @@ private fun PortraitLayout(viewModel: CityListViewModel) {
                 viewModel = viewModel,
                 onCityClick = { city ->
                     viewModel.onCitySelected(city)
-                    navController.navigate(Screen.Map.createRoute(city.id))
+                    navController.navigate(Screen.Map.createRoute(city.id)) {
+                        launchSingleTop = true
+                    }
                 },
                 onDetailClick = { city ->
                     viewModel.onCityDetailSelected(city)
-                    navController.navigate(Screen.Detail.createRoute(city.id))
+                    navController.navigate(Screen.Detail.createRoute(city.id)) {
+                        launchSingleTop = true
+                    }
                 },
             )
         }
