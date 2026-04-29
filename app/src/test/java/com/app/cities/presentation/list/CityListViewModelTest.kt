@@ -62,32 +62,6 @@ class CityListViewModelTest {
         Dispatchers.resetMain()
     }
 
-  /*  @Test
-    fun `uiState starts as loading then exposes all cities`() = runTest {
-        viewModel = buildViewModel()
-        advanceUntilIdle()
-
-        val state = viewModel.uiState.value
-        assertFalse(state.isLoading)
-        assertNull(state.error)
-        assertEquals(sampleCities, state.cities)
-    }*/
-
-    /*@Test
-    fun `onSearch filters cities by prefix`() = runTest {
-        viewModel = buildViewModel()
-        advanceUntilIdle()
-
-        viewModel.onSearch("al")
-
-        advanceTimeBy(300)
-        advanceUntilIdle()
-
-        val filtered = viewModel.uiState.value.cities
-        assertEquals(2, filtered.size)
-        assertTrue(filtered.all { it.name.startsWith("Al") })
-    }*/
-
     @Test
     fun `onSearch with empty string restores full list`() = runTest {
         viewModel = buildViewModel()
@@ -137,19 +111,6 @@ class CityListViewModelTest {
         assertEquals(SelectedPanel.None, state.selectedPanel)
     }
 
-
-/*
-    @Test
-    fun `onToggleFavoritesFilter toggles showOnlyFavorites flag`() = runTest {
-        viewModel = buildViewModel()
-        advanceUntilIdle()
-
-        assertFalse(viewModel.uiState.value.showOnlyFavorites)
-        viewModel.onToggleFavoritesFilter()
-        advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.showOnlyFavorites)
-    }
-*/
 
     @Test
     fun `onToggleFavorite delegates to toggleFavoriteUseCase`() = runTest {
