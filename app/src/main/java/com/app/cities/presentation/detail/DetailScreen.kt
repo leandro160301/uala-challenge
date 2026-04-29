@@ -65,7 +65,7 @@ fun CityDetailScreen(
                         IconButton(onClick = onBack) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null
+                                contentDescription = "Back"
                             )
                         }
                     },

@@ -3,9 +3,12 @@ package com.app.cities.presentation.detail
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.app.cities.domain.model.City
+import junit.framework.TestCase.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,6 +62,9 @@ class DetailScreenTest {
                 onBack = { backClicked = true }
             )
         }
+
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        assertTrue(backClicked)
 
     }
 }
