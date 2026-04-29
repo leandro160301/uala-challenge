@@ -45,14 +45,10 @@ The full dataset (~200k cities) is loaded into memory and kept cached to enable:
 - Predictable performance (`O(log n + k)`)
 - No UI blocking during filtering
 
----
-
 ### Trade-offs
 
 - Higher memory consumption
 - No incremental loading
-
----
 
 ### Production Consideration
 
@@ -119,11 +115,27 @@ The app uses `HttpURLConnection` instead of libraries like Retrofit.
 
 Reason:
 
-* The challenge explicitly restricts third-party libraries
-* `HttpURLConnection` is part of the standard Android SDK
-* It is sufficient for this use case (simple GET request)
+- The networking requirements are minimal (single GET request)
+- Using `HttpURLConnection` avoids unnecessary abstraction
+- Keeps the implementation lightweight and easy to follow
+
+### Trade-offs
+
+- More boilerplate compared to Retrofit
+- Manual handling of response parsing and errors
+
+### Production Consideration
+
+In a real-world scenario, this layer would likely be implemented using **Retrofit + OkHttp** to support:
+
+- Cleaner API definitions
+- Better error handling
+- Interceptors (logging, authentication, etc.)
+- Easier scalability for multiple endpoints
+
 
 ---
+
 
 ## Dependency Injection
 
