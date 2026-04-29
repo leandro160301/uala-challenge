@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,7 +30,9 @@ import com.app.cities.presentation.map.MapScreen
 import com.app.cities.presentation.navigation.Screen
 
 @Composable
-fun CitiesNavGraph(viewModel: CityListViewModel) {
+fun CitiesNavGraph(
+    viewModel: CityListViewModel = hiltViewModel()
+) {
     val isLandscape =
         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
