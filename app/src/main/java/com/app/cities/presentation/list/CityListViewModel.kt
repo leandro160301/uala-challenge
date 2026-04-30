@@ -47,9 +47,7 @@ class CityListViewModel @Inject constructor(
             combine(
                 getCitiesUseCase(),
                 getFavoriteIdsUseCase(),
-                queryFlow
-                    .debounce(300)
-                    .distinctUntilChanged(),
+                queryFlow,
                 showFavoritesFlow
             ) { cities, favorites, query, showOnlyFavorites ->
                 FilterParams(cities, favorites, query, showOnlyFavorites)
