@@ -125,22 +125,24 @@ private fun LandscapePlaceholder() {
 
 @Composable
 private fun PortraitLayout(viewModel: CityListViewModel) {
-    val navController = rememberNavController()
     val uiState by viewModel.uiState.collectAsState()
+    val navController = rememberNavController()
+    val selectedRoute = when (val panel = uiState.selectedPanel) {
+        is SelectedPanel.Map -> Screen.Map.createRoute(panel.cityId)
+        is SelectedPanel.Detail -> Screen.Detail.createRoute(panel.cityId)
+        is SelectedPanel.None -> Screen.List.route
+    }
 
-    LaunchedEffect(Unit) {
-        when (val panel = uiState.selectedPanel) {
-            is SelectedPanel.Map -> {
-                navController.navigate(Screen.Map.createRoute(panel.cityId)) {
-                    launchSingleTop = true
-                }
+    LaunchedEffect(selectedRoute) {
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+        if (currentRoute == selectedRoute) return@LaunchedEffect
+
+        if (selectedRoute == Screen.List.route) {
+            navController.popBackStack(Screen.List.route, inclusive = false)
+        } else {
+            navController.navigate(selectedRoute) {
+                launchSingleTop = true
             }
-            is SelectedPanel.Detail -> {
-                navController.navigate(Screen.Detail.createRoute(panel.cityId)) {
-                    launchSingleTop = true
-                }
-            }
-            is SelectedPanel.None -> {}
         }
     }
 
