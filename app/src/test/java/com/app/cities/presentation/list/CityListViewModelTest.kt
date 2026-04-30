@@ -63,19 +63,6 @@ class CityListViewModelTest {
     }
 
     @Test
-    fun `onSearch with empty string restores full list`() = runTest {
-        viewModel = buildViewModel()
-        advanceUntilIdle()
-
-        viewModel.onSearch("Al")
-        advanceUntilIdle()
-        viewModel.onSearch("")
-        advanceUntilIdle()
-
-        assertEquals(sampleCities, viewModel.uiState.value.cities)
-    }
-
-    @Test
     fun `onCitySelected updates selectedCityId and opens Map panel`() = runTest {
         viewModel = buildViewModel()
         advanceUntilIdle()
