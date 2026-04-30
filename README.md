@@ -255,6 +255,28 @@ The app supports:
 
 ---
 
+## Setup (Required)
+
+This project uses the Google Maps SDK.
+For security reasons, the API key is not included in the repository.
+
+To run the project, create a file named local.properties in the project root and add your key:
+
+MAPS_API_KEY=your_google_maps_api_key_here
+
+Then sync Gradle and run the app.
+
+How to get an API key
+Open the Google Cloud Console
+https://console.cloud.google.com/
+Create or select a project
+Enable Maps SDK for Android
+Create an Android API Key and add your SHA-1 fingerprint and package name:
+com.app.cities
+Why the key is not included
+
+The API key was intentionally removed from the repository and injected at build time via Gradle (manifestPlaceholders) to follow best security practices and avoid exposing credentials in source control.
+
 ##  Conclusion
 
 This implementation prioritizes:
