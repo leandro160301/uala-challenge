@@ -39,8 +39,7 @@ class DetailScreenTest {
 
         composeTestRule.onAllNodesWithText("Buenos Aires").assertCountEquals(2)
         composeTestRule.onNodeWithText("AR").assertExists()
-        composeTestRule.onNodeWithText("-34.6037").assertExists()
-        composeTestRule.onNodeWithText("-58.3816").assertExists()
+        composeTestRule.onNodeWithText("-34.6037°, -58.3816°").assertExists()
     }
 
     @Test
