@@ -50,7 +50,8 @@ fun CityListScreen(
         onFavoriteClick = { cityId -> viewModel.onToggleFavorite(cityId) },
         onToggleFavoritesFilter = { viewModel.onToggleFavoritesFilter() },
         onCityClick = onCityClick,
-        onDetailClick = onDetailClick
+        onDetailClick = onDetailClick,
+        onLoadMore = { viewModel.loadMore() }
     )
 }
 
@@ -62,7 +63,8 @@ fun CityListContent(
     onFavoriteClick: (Int) -> Unit,
     onToggleFavoritesFilter: () -> Unit,
     onCityClick: (City) -> Unit,
-    onDetailClick: (City) -> Unit
+    onDetailClick: (City) -> Unit,
+    onLoadMore: () -> Unit = {}
 ) {
     Column(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
 
@@ -155,6 +157,7 @@ fun CityListContent(
                     onFavoriteClick = onFavoriteClick,
                     onCityClick = onCityClick,
                     onDetailClick = onDetailClick,
+                    onLoadMore = onLoadMore,
                     favoriteIds = state.favoriteIds
                 )
             }

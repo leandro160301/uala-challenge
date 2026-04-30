@@ -31,6 +31,9 @@ class CityListViewModel @Inject constructor(
     private val showFavoritesFlow = MutableStateFlow(false)
 
     private var allCities: List<City> = emptyList()
+    private var currentFilteredCities: List<City> = emptyList()
+    private var currentPage = 1
+    private val pageSize = 50
 
     private val _uiState = MutableStateFlow(CityListUiState(isLoading = true))
     val uiState: StateFlow<CityListUiState> = _uiState
@@ -69,8 +72,13 @@ class CityListViewModel @Inject constructor(
                         result
                     }
 
+                    currentFilteredCities = filtered
+                    currentPage = 1
+                    
+                    val pagedCities = filtered.take(pageSize)
+
                     _uiState.value.copy(
-                        cities = filtered,
+                        cities = pagedCities,
                         query = params.query,
                         showOnlyFavorites = params.showOnlyFavorites,
                         hasFavorites = params.favorites.isNotEmpty(),
@@ -87,6 +95,14 @@ class CityListViewModel @Inject constructor(
 
     fun getCityById(id: Int): City? {
         return allCities.firstOrNull { it.id == id }
+    }
+
+    fun loadMore() {
+        if (currentFilteredCities.size > currentPage * pageSize) {
+            currentPage++
+            val nextCities = currentFilteredCities.take(currentPage * pageSize)
+            _uiState.value = _uiState.value.copy(cities = nextCities)
+        }
     }
 
 
